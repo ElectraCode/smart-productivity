@@ -12,6 +12,7 @@
     "@blocknote/core": "^0.16.0",
     "@blocknote/mantine": "^0.16.0",
     "@blocknote/react": "^0.16.0",
+    "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.10.2",
     "@clerk/clerk-react": "^5.11.0",
     "@clerk/nextjs": "^5.7.2",
