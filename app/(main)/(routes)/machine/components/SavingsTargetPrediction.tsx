@@ -14,6 +14,7 @@ import {
   FormErrorMessage,
   Flex,
   Tooltip,
+  Icon,
   SlideFade,
   Alert,
   AlertIcon,
@@ -59,7 +60,6 @@ const SavingsTargetPrediction = () => {
   // Fetch financial data and user savings target from the backend
   const userExpenses = useQuery(api.expense.getExpenses) || [];
   const userSavingsTarget = useQuery(api.target.getSavingsTarget, {
-    userId,
     year: currentYear,
   });
 
@@ -149,10 +149,10 @@ const SavingsTargetPrediction = () => {
       setIsSaving(true);
       try {
         await setSavingsTargetMutation({
-          userId,
           targetAmount: savingsTarget,
           year: currentYear,
         });
+
         toast({
           title: "Savings target saved!",
           description: `Your target of $${savingsTarget} has been saved.`,
