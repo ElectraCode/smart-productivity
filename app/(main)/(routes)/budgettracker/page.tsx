@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Pie } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,45 +19,25 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import {
   Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Heading,
   Text,
   VStack,
-  HStack,
   useToast,
   Container,
   Stat,
   StatLabel,
   StatNumber,
-  StatGroup,
   Divider,
   Flex,
   Icon,
-  Badge,
   useColorModeValue,
-  useToken,
 } from "@chakra-ui/react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaHome, FaMoneyBillWave } from "react-icons/fa";
 import StatCards from "./components/StatCards";
 import ExpenseForm from "./components/ExpenseForm";
-import ExpenseBreakdownBarChart from "./components/charts/ExpenseBreakdownBarChart";
 import WeeklySummary from "./components/WeeklySummary";
 import MonthlySummary from "./components/MonthlySummary";
-import {
-  WeeklySummaryLineChart,
-  MonthlySummaryLineChart,
-  YearlySummaryLineChart,
-} from "./components/charts/LineChart";
+
 import YearlySummary from "./components/YearlySummary";
 import ExpenseList from "./components/ExpenseList";
 import HouseholdForm from "./components/HouseholdForm";
@@ -105,17 +84,6 @@ interface YearlyTotals {
   totalExpenses: number;
   incomeByCategory: Record<string, number>; // Add this field
   expensesByCategory: Record<string, number>; // Add this field
-}
-
-interface CategoryTotals {
-  [key: string]: number;
-  housingCost: number;
-  foodCost: number;
-  transportationCost: number;
-  healthcareCost: number;
-  otherNecessitiesCost: number;
-  childcareCost: number;
-  taxes: number;
 }
 
 interface MonthlyTotalsAggregate {
@@ -166,15 +134,6 @@ const BudgetTrackerPage: React.FC = () => {
   const updateExpenseMutation = useMutation(api.expense.updateExpense);
   // Import the mutation from your generated API
   const setHouseholdMutation = useMutation(api.household.setHousehold);
-  const categoryColors = {
-    housing_cost: "#FF6384",
-    food_cost: "#36A2EB",
-    transportation_cost: "#FFCE56",
-    healthcare_cost: "#4BC0C0",
-    other_necessities_cost: "#9966FF",
-    childcare_cost: "#FF9F40",
-    taxes: "#C9CBCF",
-  };
 
   // Function to handle saving the household data
   const saveHousehold = async (numAdults: number, numChildren: number) => {
@@ -384,38 +343,6 @@ const BudgetTrackerPage: React.FC = () => {
 
   const currentBalance = totalIncome - totalExpenses;
 
-  const combinedData = {
-    labels: ["Income", "Expenses"],
-    datasets: [
-      {
-        data: [
-          expenses
-            .filter((e) => e.type === "income")
-            .reduce((acc, e) => acc + e.amount, 0),
-          expenses
-            .filter((e) => e.type === "expense")
-            .reduce((acc, e) => acc + e.amount, 0),
-        ],
-        backgroundColor: ["#68D391", "#FC8181", "#63B3ED"],
-        borderColor: ["#2F855A", "#C53030", "#3182CE"],
-        borderWidth: 1,
-      },
-    ],
-  };
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-      },
-      tooltip: {
-        callbacks: {
-          label: (context: any) => `${context.label}: ${context.raw}`,
-        },
-      },
-    },
-  };
-
   useEffect(() => {
     console.log("Expenses Updated:", expenses); // Log expenses to see what data you have
 
@@ -542,8 +469,6 @@ const BudgetTrackerPage: React.FC = () => {
     }));
   };
 
-  const userId = "your-user-id"; // This should be dynamically obtained from your auth context
-
   const householdData = useQuery(api.household.getHouseholdByUserId);
 
   useEffect(() => {
@@ -552,48 +477,6 @@ const BudgetTrackerPage: React.FC = () => {
       setNumChildren(householdData.numChildren);
     }
   }, [householdData]);
-
-  const getCategoryTotals = (): CategoryTotals => {
-    const categoryTotals: CategoryTotals = {
-      housingCost: 0,
-      foodCost: 0,
-      transportationCost: 0,
-      healthcareCost: 0,
-      otherNecessitiesCost: 0,
-      childcareCost: 0,
-      taxes: 0,
-    };
-
-    expenses.forEach((expense) => {
-      if (expense.type === "expense") {
-        switch (expense.category) {
-          case "housing_cost":
-            categoryTotals.housingCost += expense.amount;
-            break;
-          case "food_cost":
-            categoryTotals.foodCost += expense.amount;
-            break;
-          case "transportation_cost":
-            categoryTotals.transportationCost += expense.amount;
-            break;
-          case "healthcare_cost":
-            categoryTotals.healthcareCost += expense.amount;
-            break;
-          case "other_necessities_cost":
-            categoryTotals.otherNecessitiesCost += expense.amount;
-            break;
-          case "childcare_cost":
-            categoryTotals.childcareCost += expense.amount;
-            break;
-          case "taxes":
-            categoryTotals.taxes += expense.amount;
-            break;
-        }
-      }
-    });
-
-    return categoryTotals;
-  };
 
   const handleAddExpense = (newExpense: {
     amount: number;
@@ -610,50 +493,130 @@ const BudgetTrackerPage: React.FC = () => {
     ]);
   };
 
-  const startEditing = (
-    id: number,
-    amount: number,
-    type: "income" | "expense",
-    category: string,
-    date: string // Add date here
-  ) => {
-    setEditingId(id);
-    setEditAmount(amount);
-    setEditCategory(category);
-    // You can add `setEditDate(date)` here if you want to handle the date.
-  };
+  const cardBgColor = useColorModeValue("#2f2f2f", "#2f2f2f");
 
   return (
     <Container maxW="container.xl" p={4}>
       <Heading as="h1" size="2xl" textAlign="center" mb={6} color={"white"}>
         Budget Tracker
       </Heading>
-      <StatCards
-        numAdults={numAdults}
-        numChildren={numChildren}
-        totalIncome={totalIncome}
-        totalExpenses={totalExpenses}
-        currentBalance={currentBalance}
-      />
-
-      <Box boxShadow="md" p={5} rounded="md" bg="white">
-        <Heading size="lg" mb={4}>
-          Household Information
-        </Heading>
-        {/* Use HouseholdForm component */}
-        <HouseholdForm
+      <Flex justify="center" gap={6} mb={6}>
+        <StatCards
           numAdults={numAdults}
           numChildren={numChildren}
-          onSaveHousehold={saveHousehold}
+          totalIncome={totalIncome}
+          totalExpenses={totalExpenses}
+          currentBalance={currentBalance}
         />
-      </Box>
+      </Flex>
 
-      <Box boxShadow="md" p={5} rounded="md" bg="white">
-        <Heading size="lg" mb={4}>
-          Add New Expense
-        </Heading>
-        <ExpenseForm onAddExpense={handleAddExpense} />
-      </Box>
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        gap={6}
+        align="flex-start"
+        justify="center"
+      >
+        {/* Household Information Section */}
+        <Flex
+          flex="1"
+          minH={{ base: "auto", md: "400px" }} // Responsive minimum height
+          direction="column"
+          bg={cardBgColor}
+          boxShadow="lg"
+          p={6}
+          rounded="lg"
+          color="whiteAlpha.900"
+          border="1px solid rgba(255, 255, 255, 0.15)"
+          transition="transform 0.3s ease"
+          _hover={{ transform: "scale(1.02)" }}
+          width="100%" // Full width on mobile
+        >
+          <Flex align="center" mb={4}>
+            <Icon as={FaHome} boxSize={5} color="whiteAlpha.700" mr={2} />
+            <Heading size="md" color="whiteAlpha.900">
+              Household Information
+            </Heading>
+          </Flex>
+          <Divider mb={4} borderColor="whiteAlpha.300" />
+          <Box w="100%" display="flex" justifyContent="center">
+            <HouseholdForm
+              numAdults={numAdults}
+              numChildren={numChildren}
+              onSaveHousehold={saveHousehold}
+            />
+          </Box>
+          <Box mt={6} p={4} bg="whiteAlpha.100" borderRadius="md" flexGrow="1">
+            <Heading size="sm" mb={2} color="whiteAlpha.800">
+              Household Budget Insights
+            </Heading>
+            <Divider mb={3} borderColor="whiteAlpha.300" />
+            <Stat>
+              <StatLabel color="whiteAlpha.700">
+                Average Expense per Person
+              </StatLabel>
+              <StatNumber>
+                ${(totalExpenses / (numAdults + numChildren || 1)).toFixed(2)}
+              </StatNumber>
+            </Stat>
+            <Stat mt={4}>
+              <StatLabel color="whiteAlpha.700">
+                Recommended Monthly Savings
+              </StatLabel>
+              <StatNumber>${(currentBalance * 0.2).toFixed(2)}</StatNumber>
+              <Text fontSize="xs" color="whiteAlpha.600">
+                (20% of Current Balance)
+              </Text>
+            </Stat>
+          </Box>
+        </Flex>
+
+        {/* Add New Expense Section */}
+        <Flex
+          flex="1"
+          minH={{ base: "auto", md: "400px" }} // Responsive minimum height
+          direction="column"
+          bg={cardBgColor}
+          boxShadow="lg"
+          p={6}
+          rounded="lg"
+          color="whiteAlpha.900"
+          border="1px solid rgba(255, 255, 255, 0.15)"
+          transition="transform 0.3s ease"
+          _hover={{ transform: "scale(1.02)" }}
+          width="100%" // Full width on mobile
+        >
+          <Flex align="center" mb={4}>
+            <Icon
+              as={FaMoneyBillWave}
+              boxSize={5}
+              color="whiteAlpha.700"
+              mr={2}
+            />
+            <Heading size="md" color="whiteAlpha.900">
+              Add New Expense
+            </Heading>
+          </Flex>
+          <Divider mb={4} borderColor="whiteAlpha.300" />
+          <Box w="100%" display="flex" justifyContent="center">
+            <ExpenseForm onAddExpense={handleAddExpense} />
+          </Box>
+          <Box mt={6} flexGrow="1">
+            <Text fontSize="sm" color="whiteAlpha.600" textAlign="center">
+              For more information about expense prediction, please visit the
+              <Text
+                as="span"
+                color="blue.400"
+                fontWeight="bold"
+                cursor="pointer"
+              >
+                {" "}
+                Machine Page
+              </Text>
+              .
+            </Text>
+          </Box>
+        </Flex>
+      </Flex>
 
       <VStack spacing={6} align="stretch">
         {/* Weekly Summary */}
