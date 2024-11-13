@@ -305,31 +305,20 @@ const HomePage: React.FC = () => {
     type: "income" | "expense";
     category: string;
   }) => {
-    try {
-      const expenseEntry = {
-        ...newExpense,
-        id: Date.now(),
-        date: new Date().toISOString(),
-      };
-      await addExpenseMutation(expenseEntry);
-      setExpenses((prev) => [...prev, expenseEntry]);
-      toast({
-        title: "Expense Added",
-        description: "Your expense has been added successfully.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      toast({
-        title: "Error Adding Expense",
-        description: "There was an error adding your expense.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      console.error("Error adding expense:", error);
-    }
+    const expenseEntry = {
+      ...newExpense,
+      id: Date.now(),
+      date: new Date().toISOString(),
+    };
+    await addExpenseMutation(expenseEntry);
+    setExpenses((prev) => [...prev, expenseEntry]);
+    toast({
+      title: "Expense Added",
+      description: "Your expense has been added successfully.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
   if (loadingTasks || loadingExpenses) {
@@ -440,13 +429,13 @@ const HomePage: React.FC = () => {
 
           <Box
             boxShadow="lg"
-            p={4}
             rounded="xl"
             bg="linear-gradient(145deg, #222233, #2f2f47)"
           >
             <Heading
               size="md"
               mb={3}
+              p={3}
               color="white"
               textShadow="0px 2px 6px rgba(0, 0, 0, 0.5)"
             >
@@ -547,7 +536,7 @@ const HomePage: React.FC = () => {
         <Box
           flex="1 0 auto"
           overflow="auto"
-          bg="rgba(255, 255, 255, 0.08)"
+          bg="radial-gradient(circle at center, #303030 0%, #34373f 25%, #2f3246 50%, #303030 100%)"
           rounded="xl"
           boxShadow="lg"
           textColor="white"
