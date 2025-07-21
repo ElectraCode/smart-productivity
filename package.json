@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@blocknote/core": "^0.16.0",
+    "@blocknote/core": "^0.30.0",
     "@blocknote/mantine": "^0.16.0",
     "@blocknote/react": "^0.16.0",
     "@chakra-ui/icons": "^2.2.4",
@@ -33,6 +33,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@tanstack/react-table": "^8.20.5",
     "@tensorflow/tfjs": "^4.21.0",
+    "ajv": "^8.17.1",
     "blocknote-core": "^1.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -41,13 +42,16 @@
     "emoji-picker-react": "^4.12.0",
     "framer-motion": "^11.11.8",
     "lucide-react": "^0.452.0",
-    "next": "14.2.15",
+    "next": "^14.2.15",
     "next-themes": "^0.3.0",
-    "react": "^18",
+    "openai": "^5.10.1",
+    "prosemirror-view": "^1.39.2",
+    "punycode": "^2.3.1",
+    "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-color": "^2.19.3",
     "react-datepicker": "^7.4.0",
-    "react-dom": "^18",
+    "react-dom": "^18.3.1",
     "react-draggable": "^4.4.6",
     "react-dropzone": "^14.2.9",
     "sonner": "^1.5.0",
@@ -58,13 +62,19 @@
     "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "@next/eslint-plugin-next": "^15.3.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.15",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
+    "eslint-plugin-next": "^0.0.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.1.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.32.0"
   }
 }

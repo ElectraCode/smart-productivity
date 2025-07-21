@@ -20,6 +20,7 @@ import {
   Spinner,
   Container,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 
 interface Task {
@@ -78,63 +79,145 @@ const TaskPage: React.FC = () => {
   if (loading) return <p>Loading tasks...</p>;
 
   return (
-    <Container maxW="container.xl" p={4}>
-      <Heading color={"white"} mb={6}>
+    <Container
+      maxW={{ base: "container.sm", md: "container.lg", xl: "container.xl" }}
+      height={"stretch"}
+      p={{ base: 4, md: 6, xl: 8 }}
+      className="rounded-lg shadow-lg"
+      borderRadius={{ base: "lg", md: "xl" }}
+      boxShadow="lg"
+    >
+      <Heading
+        size={{ base: "lg", md: "2xl" }}
+        className="text-gray-800 dark:text-white mb-8 text-center "
+      >
         Task Management
       </Heading>
       <VStack
         as="form"
-        color={"white"}
         onSubmit={
           handleSubmit as unknown as React.FormEventHandler<HTMLDivElement>
         }
-        spacing={4}
+        spacing={6}
         align="stretch"
+        className="bg-gray-100 dark:bg-[radial-gradient(circle_at_center,_#303030_0%,_#34373f_25%,_#2f3246_50%,_#303030_100%)] p-6 rounded-lg shadow-md"
       >
         <FormControl isRequired>
-          <FormLabel htmlFor="title">Title</FormLabel>
+          <FormLabel
+            htmlFor="title"
+            className="text-gray-600 dark:text-gray-300 font-bold"
+          >
+            Title
+          </FormLabel>
           <Input
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
+            className="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md"
           />
         </FormControl>
+
         <FormControl>
-          <FormLabel color={"white"}>Status</FormLabel>
-          <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-            <option value="backlog">Backlog</option>
-            <option value="todo">Todo</option>
-            <option value="in progress">In Progress</option>
-            <option value="done">Done</option>
-            <option value="canceled">Canceled</option>
+          <FormLabel className="text-gray-600 dark:text-gray-300 font-bold">
+            Status
+          </FormLabel>
+          <Select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md"
+          >
+            <option value="backlog" style={{ color: "black" }}>
+              Backlog
+            </option>
+            <option value="todo" style={{ color: "black" }}>
+              Todo
+            </option>
+            <option value="in progress" style={{ color: "black" }}>
+              In Progress
+            </option>
+            <option value="done" style={{ color: "black" }}>
+              Done
+            </option>
+            <option value="canceled" style={{ color: "black" }}>
+              Canceled
+            </option>
           </Select>
         </FormControl>
+
         <FormControl>
-          <FormLabel>Label</FormLabel>
-          <Select value={label} onChange={(e) => setLabel(e.target.value)}>
-            <option value="bug">Bug</option>
-            <option value="feature">Feature</option>
-            <option value="documentation">Documentation</option>
+          <FormLabel className="text-gray-600 dark:text-gray-300 font-bold">
+            Label
+          </FormLabel>
+          <Select
+            value={label}
+            onChange={(e) => setLabel(e.target.value)}
+            className="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md"
+          >
+            <option value="bug" style={{ color: "black" }}>
+              Bug
+            </option>
+            <option value="feature" style={{ color: "black" }}>
+              Feature
+            </option>
+            <option value="documentation" style={{ color: "black" }}>
+              Documentation
+            </option>
           </Select>
         </FormControl>
+
         <FormControl>
-          <FormLabel>Priority</FormLabel>
+          <FormLabel className="text-gray-600 dark:text-gray-300 font-bold">
+            Priority
+          </FormLabel>
           <Select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
+            className="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded-md"
           >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low" style={{ color: "black" }}>
+              Low
+            </option>
+            <option value="medium" style={{ color: "black" }}>
+              Medium
+            </option>
+            <option value="high" style={{ color: "black" }}>
+              High
+            </option>
           </Select>
         </FormControl>
-        <Button type="submit" colorScheme="blue">
+
+        <Button
+          type="submit"
+          colorScheme="blue"
+          width="full"
+          py={6}
+          fontSize="lg"
+          fontWeight="bold"
+          bgGradient="linear(to-r, blue.500, cyan.400)"
+          color="white"
+          _hover={{
+            bgGradient: "linear(to-r, blue.600, cyan.500)",
+            transform: "scale(1.02)",
+            boxShadow: "xl",
+          }}
+          _active={{
+            bgGradient: "linear(to-r, blue.700, cyan.600)",
+            transform: "scale(0.98)",
+          }}
+          borderRadius="md"
+          boxShadow="lg"
+          transition="all 0.2s ease-in-out"
+        >
           Add Task
         </Button>
       </VStack>
-      <Box color="white">
-        <DataTable data={tasks} columns={columns} />
+
+      <Box className="text-gray-800 dark:text-white mt-8">
+        <Text className="text-lg font-bold mb-4">Task List</Text>
+        <Box className="bg-gray-100 dark:bg-[radial-gradient(circle_at_center,_#303030_0%,_#34373f_25%,_#2f3246_50%,_#303030_100%)] p-4 rounded-lg shadow-md">
+          <DataTable data={tasks} columns={columns} />
+        </Box>
       </Box>
     </Container>
   );
