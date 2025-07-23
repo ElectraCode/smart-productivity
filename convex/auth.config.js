@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: "https://healthy-piglet-77.clerk.accounts.dev",
+      domain: "https://darling-raven-79.clerk.accounts.dev",
       applicationID: "convex",
     },
   ],
